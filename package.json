@@ -30,6 +30,6 @@
   },
   "devDependencies": {
     "@types/async": "^3.2.16",
-    "@types/node": "^18.11.19"
+    "@types/node": "^18.13.0"
   }
 }
