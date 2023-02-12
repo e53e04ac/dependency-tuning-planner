@@ -6,7 +6,6 @@ npm install e53e04ac/dependency-tuning-planner
 
 ~~~~~ mjs
 import { DependencyTuningPlanner } from 'e53e04ac/dependency-tuning-planner';
-import { DependencyTuningPlanner } from 'e53e04ac/dependency-tuning-planner';
 ~~~~~
 
 ~~~~~ mermaid
@@ -29,11 +28,11 @@ graph RL;
   A ----> B_4;
   A ----> B_5;
   click B_0 "https://www.npmjs.org/package/async/v/3.2.4";
-  click B_1 "https://github.com/e53e04ac/file-entry-native/tree/d18fec26c8d54d028c89fe513c9e51f713867e44";
-  click B_2 "https://github.com/e53e04ac/hold/tree/67e5b60f9bb3221f8b200107c13e89a604a93631";
+  click B_1 "https://github.com/e53e04ac/file-entry-native/tree/0e0f87721b3753446d291c2ed8bd1755a851d321";
+  click B_2 "https://github.com/e53e04ac/hold/tree/5dd6f94b8ecd94f98219a7afae52320676380c27";
   click B_3 "https://www.npmjs.org/package/@types/async/v/3.2.16";
   click B_4 "https://www.npmjs.org/package/@types/node/v/18.13.0";
-  click B_5 "https://github.com/e53e04ac/file-entry/tree/eb9b340b50a6a171cda08fa63be4e647bd77caba";
+  click B_5 "https://github.com/e53e04ac/file-entry/tree/77cbd9d0db1e4a74fd5af363999096d9172bd83d";
 ~~~~~
 
 ~~~~~ mermaid
@@ -58,8 +57,8 @@ graph RL;
 ~~~~~ mermaid
 graph RL;
   subgraph "e53e04ac/dependency-tuning-planner";
-    E_0(["DependencyTuningPlanner"]);
-    E_1(["DependencyTuningPlanner"]);
+    E_0(["type DependencyTuningPlanner"]);
+    E_1(["const DependencyTuningPlanner"]);
   end;
   M(["index.d.ts"])
   subgraph "file-entry";
