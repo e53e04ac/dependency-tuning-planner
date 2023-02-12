@@ -19,6 +19,7 @@ export declare namespace DependencyTuningPlanner {
     type Dependency = {
         readonly name: string;
         readonly version: string;
+        readonly dev: boolean;
     };
 
     type Repository = {
@@ -40,9 +41,9 @@ export declare namespace DependencyTuningPlanner {
         readonly options: Get<Options>;
         readonly _options: Get<unknown>;
         readonly packageJson: {
-            (directory: FileEntry): PackageJson;
+            (directory: FileEntry): Promise<PackageJson>;
         };
-        readonly repositories: Get<Repository[]>;
+        readonly repositories: Get<Promise<Repository[]>>;
     };
 
     type Self = {

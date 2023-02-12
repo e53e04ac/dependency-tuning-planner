@@ -28,27 +28,31 @@ const constructor = ((options) => {
             return _options;
         }),
         packageJson: ((directory) => {
-            return directory.resolve('package.json').readJsonSync();
+            return directory.resolve('package.json').readJson();
         }),
         repositories: hold(() => {
-            return _options.repositories().map(({ directory }) => {
-                const packageJson = _self.packageJson(directory);
-                const dependsOn = [
-                    ...Object.entries(packageJson.dependencies ?? {}),
-                    ...Object.entries(packageJson.devDependencies ?? {}),
-                ].map(([name, version]) => {
-                    return { name, version };
-                }).filter((dependency) => {
-                    return _options.filter(dependency);
-                }).map(({ name }) => {
-                    return name;
-                });
-                return {
-                    directory,
-                    name: packageJson.name,
-                    dependsOn,
-                };
-            });
+            return Promise.all(_options.repositories().map(({ directory }) => {
+                return (async () => {
+                    const packageJson = await _self.packageJson(directory);
+                    const dependsOn = [
+                        ...Object.entries(packageJson.dependencies ?? {}).map(([name, version]) => {
+                            return { name, version, dev: false };
+                        }),
+                        ...Object.entries(packageJson.devDependencies ?? {}).map(([name, version]) => {
+                            return { name, version, dev: true };
+                        }),
+                    ].filter((dependency) => {
+                        return _options.filter(dependency);
+                    }).map(({ name }) => {
+                        return name;
+                    });
+                    return {
+                        directory,
+                        name: packageJson.name,
+                        dependsOn,
+                    };
+                })();
+            }));
         }),
     });
 
@@ -60,7 +64,8 @@ const constructor = ((options) => {
         plan: hold(async () => {
             /** @type {import('.').DependencyTuningPlanner.Repository[]} */
             const result = [];
-            const tasks = Object.fromEntries(_self.repositories().map(({ directory, name, dependsOn }) => {
+            const repositories = await _self.repositories();
+            const tasks = Object.fromEntries(repositories.map(({ directory, name, dependsOn }) => {
                 return [name, [...dependsOn, async () => {
                     result.push({ directory, name, dependsOn });
                 }]];
