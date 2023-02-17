@@ -30,28 +30,29 @@ const constructor = ((options) => {
         packageJson: ((directory) => {
             return directory.resolve('package.json').readJson();
         }),
+        repository: (async (directory) => {
+            const packageJson = await _self.packageJson(directory);
+            const dependsOn = [
+                ...Object.entries(packageJson.dependencies ?? {}).map(([name, version]) => {
+                    return { name, version, dev: false };
+                }),
+                ...Object.entries(packageJson.devDependencies ?? {}).map(([name, version]) => {
+                    return { name, version, dev: true };
+                }),
+            ].filter((dependency) => {
+                return _options.filter(dependency);
+            }).map(({ name }) => {
+                return name;
+            });
+            return {
+                directory,
+                name: packageJson.name,
+                dependsOn,
+            };
+        }),
         repositories: hold(() => {
             return Promise.all(_options.repositories().map(({ directory }) => {
-                return (async () => {
-                    const packageJson = await _self.packageJson(directory);
-                    const dependsOn = [
-                        ...Object.entries(packageJson.dependencies ?? {}).map(([name, version]) => {
-                            return { name, version, dev: false };
-                        }),
-                        ...Object.entries(packageJson.devDependencies ?? {}).map(([name, version]) => {
-                            return { name, version, dev: true };
-                        }),
-                    ].filter((dependency) => {
-                        return _options.filter(dependency);
-                    }).map(({ name }) => {
-                        return name;
-                    });
-                    return {
-                        directory,
-                        name: packageJson.name,
-                        dependsOn,
-                    };
-                })();
+                return _self.repository(directory);
             }));
         }),
     });

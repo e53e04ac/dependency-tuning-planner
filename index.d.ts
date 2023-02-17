@@ -43,6 +43,9 @@ export declare namespace DependencyTuningPlanner {
         readonly packageJson: {
             (directory: FileEntry): Promise<PackageJson>;
         };
+        readonly repository: {
+            (directory: FileEntry): Promise<Repository>;
+        };
         readonly repositories: Get<Promise<Repository[]>>;
     };
 
