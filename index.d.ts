@@ -4,6 +4,7 @@
     MIT License
 */
 
+import { EventEmitter } from 'event-emitter';
 import { FileEntry } from 'file-entry';
 import { Get } from 'hold';
 import { ValueOrGet } from 'hold';
@@ -37,6 +38,8 @@ export declare namespace DependencyTuningPlanner {
         };
     };
 
+    type EventSpecs = Record<never, never>;
+
     type _Self = {
         readonly options: Get<Options>;
         readonly _options: Get<unknown>;
@@ -49,7 +52,7 @@ export declare namespace DependencyTuningPlanner {
         readonly repositories: Get<Promise<Repository[]>>;
     };
 
-    type Self = {
+    type Self = EventEmitter<EventSpecs> & {
         readonly _DependencyTuningPlanner: Get<_Self>;
         readonly plan: Get<Promise<Repository[]>>;
     };

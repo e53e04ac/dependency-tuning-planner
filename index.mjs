@@ -6,6 +6,7 @@
 
 import { auto as asyncAuto } from 'async';
 
+import { EventEmitter } from 'event-emitter';
 import { hold } from 'hold';
 import { unwrap } from 'hold';
 
@@ -59,6 +60,7 @@ const constructor = ((options) => {
 
     /** @type {import('.').DependencyTuningPlanner.Self} */
     const self = ({
+        ...EventEmitter({}),
         _DependencyTuningPlanner: (() => {
             return _self;
         }),
