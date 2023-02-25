@@ -23,42 +23,47 @@ export declare namespace DependencyTuningPlanner {
         readonly dev: boolean;
     };
 
-    type Repository = {
+    type Repository<T> = {
         readonly directory: FileEntry;
+        readonly tags: T;
+    };
+
+    type RepositoryContent<T> = Repository<T> & {
         readonly name: string;
         readonly dependsOn: string[];
     };
 
-    type Options = {
-        readonly repositories: ValueOrGet<{
-            readonly directory: FileEntry;
-        }[]>;
+    type Options<T> = {
+        readonly repositories: ValueOrGet<Repository<T>[]>;
         readonly filter: {
             (dependency: Dependency): boolean;
+        };
+        readonly __GenericTypes__?: {
+            readonly T: T;
         };
     };
 
     type EventSpecs = Record<never, never>;
 
-    type _Self = {
-        readonly options: Get<Options>;
+    type _Self<T> = {
+        readonly options: Get<Options<T>>;
         readonly _options: Get<unknown>;
         readonly packageJson: {
             (directory: FileEntry): Promise<PackageJson>;
         };
-        readonly repository: {
-            (directory: FileEntry): Promise<Repository>;
+        readonly repositoryContent: {
+            (directory: Repository<T>): Promise<RepositoryContent<T>>;
         };
-        readonly repositories: Get<Promise<Repository[]>>;
+        readonly repositoryContents: Get<Promise<RepositoryContent<T>[]>>;
     };
 
-    type Self = EventEmitter<EventSpecs> & {
-        readonly _DependencyTuningPlanner: Get<_Self>;
-        readonly plan: Get<Promise<Repository[]>>;
+    type Self<T> = EventEmitter<EventSpecs> & {
+        readonly _DependencyTuningPlanner: Get<_Self<T>>;
+        readonly plan: Get<Promise<RepositoryContent<T>[]>>;
     };
 
     type Constructor = {
-        (options: Options): Self;
+        <T>(options: Options<T>): Self<T>;
     };
 
     type Companion = Record<never, never>;
@@ -67,6 +72,6 @@ export declare namespace DependencyTuningPlanner {
 
 }
 
-export declare type DependencyTuningPlanner = DependencyTuningPlanner.Self;
+export declare type DependencyTuningPlanner<T> = DependencyTuningPlanner.Self<T>;
 
 export declare const DependencyTuningPlanner: DependencyTuningPlanner.ConstructorWithCompanion;

@@ -13,6 +13,9 @@ import { unwrap } from 'hold';
 /** @type {import('.').DependencyTuningPlanner.Constructor} */
 const constructor = ((options) => {
 
+    /** @typedef {Required<typeof options>['__GenericTypes__']} GenericTypes */
+    /** @typedef {GenericTypes['T']} T */
+
     const _options = ({
         repositories: hold(() => {
             return unwrap(options.repositories);
@@ -20,7 +23,7 @@ const constructor = ((options) => {
         filter: options.filter,
     });
 
-    /** @type {import('.').DependencyTuningPlanner._Self} */
+    /** @type {import('.').DependencyTuningPlanner._Self<T>} */
     const _self = ({
         options: (() => {
             return options;
@@ -31,46 +34,46 @@ const constructor = ((options) => {
         packageJson: ((directory) => {
             return directory.resolve('package.json').readJson();
         }),
-        repository: (async (directory) => {
-            const packageJson = await _self.packageJson(directory);
-            const dependsOn = [
-                ...Object.entries(packageJson.dependencies ?? {}).map(([name, version]) => {
-                    return { name, version, dev: false };
-                }),
-                ...Object.entries(packageJson.devDependencies ?? {}).map(([name, version]) => {
-                    return { name, version, dev: true };
-                }),
-            ].filter((dependency) => {
-                return _options.filter(dependency);
-            }).map(({ name }) => {
-                return name;
-            });
+        repositoryContent: (async (repository) => {
+            const packageJson = await _self.packageJson(repository.directory);
             return {
-                directory,
+                directory: repository.directory,
+                tags: repository.tags,
                 name: packageJson.name,
-                dependsOn,
+                dependsOn: [
+                    ...Object.entries(packageJson.dependencies ?? {}).map(([name, version]) => {
+                        return { name, version, dev: false };
+                    }),
+                    ...Object.entries(packageJson.devDependencies ?? {}).map(([name, version]) => {
+                        return { name, version, dev: true };
+                    }),
+                ].filter((dependency) => {
+                    return _options.filter(dependency);
+                }).map(({ name }) => {
+                    return name;
+                }),
             };
         }),
-        repositories: hold(() => {
-            return Promise.all(_options.repositories().map(({ directory }) => {
-                return _self.repository(directory);
+        repositoryContents: hold(() => {
+            return Promise.all(_options.repositories().map((repository) => {
+                return _self.repositoryContent(repository);
             }));
         }),
     });
 
-    /** @type {import('.').DependencyTuningPlanner.Self} */
+    /** @type {import('.').DependencyTuningPlanner.Self<T>} */
     const self = ({
         ...EventEmitter({}),
         _DependencyTuningPlanner: (() => {
             return _self;
         }),
         plan: hold(async () => {
-            /** @type {import('.').DependencyTuningPlanner.Repository[]} */
+            /** @type {import('.').DependencyTuningPlanner.RepositoryContent<T>[]} */
             const result = [];
-            const repositories = await _self.repositories();
-            const tasks = Object.fromEntries(repositories.map(({ directory, name, dependsOn }) => {
+            const repositories = await _self.repositoryContents();
+            const tasks = Object.fromEntries(repositories.map(({ directory, tags, name, dependsOn }) => {
                 return [name, [...dependsOn, async () => {
-                    result.push({ directory, name, dependsOn });
+                    result.push({ directory, tags, name, dependsOn });
                 }]];
             }));
             await asyncAuto(tasks, 1);
