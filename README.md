@@ -60,7 +60,7 @@ graph RL;
 graph RL;
   subgraph "e53e04ac/dependency-tuning-planner";
     E_0(["namespace DependencyTuningPlanner"]);
-    E_1(["type DependencyTuningPlanner"]);
+    E_1(["type DependencyTuningPlanner<T>"]);
     E_2(["const DependencyTuningPlanner"]);
   end;
   M["index.d.ts"]
