@@ -23,15 +23,15 @@ graph RL;
     B_6(["file-entry"]);
   end;
   subgraph "github";
-    C_1(["e53e04ac/event-emitter\n7e816a82855aca428d7cfe3b3600f54c0fef6c0c"]);
-    C_2(["e53e04ac/file-entry-native\n4165fbf733b4db090ef59939058d9211b8ac67c9"]);
-    C_3(["e53e04ac/hold\n511bb6663491dadc6e2760a04ee3750996d069f8"]);
-    C_6(["e53e04ac/file-entry\nf47bb48601e4e7066cd1d17d5a5c035688cfc251"]);
+    C_1(["e53e04ac/event-emitter\n9ac7c25f35b38e0c7d2823ed147a773578ee9a58"]);
+    C_2(["e53e04ac/file-entry-native\n8f5e4a1782a5773008a0b5adca827dfe0cd623e0"]);
+    C_3(["e53e04ac/hold\n418996396af94d436211958d5e6cc4acb5aa089d"]);
+    C_6(["e53e04ac/file-entry\n604b8be6e60c2a0116ba5bc26939a17584bbcd14"]);
   end;
   subgraph "npmjs";
     C_0(["async\n3.2.4"]);
     C_4(["@types/async\n3.2.18"]);
-    C_5(["@types/node\n18.14.2"]);
+    C_5(["@types/node\n18.14.4"]);
   end;
   A ----> B_0;
   A ----> B_1;
@@ -48,12 +48,12 @@ graph RL;
   B_5 ----> C_5;
   B_6 ----> C_6;
   click C_0 "https://www.npmjs.com/package/async/v/3.2.4";
-  click C_1 "https://github.com/e53e04ac/event-emitter/tree/7e816a82855aca428d7cfe3b3600f54c0fef6c0c";
-  click C_2 "https://github.com/e53e04ac/file-entry-native/tree/4165fbf733b4db090ef59939058d9211b8ac67c9";
-  click C_3 "https://github.com/e53e04ac/hold/tree/511bb6663491dadc6e2760a04ee3750996d069f8";
+  click C_1 "https://github.com/e53e04ac/event-emitter/tree/9ac7c25f35b38e0c7d2823ed147a773578ee9a58";
+  click C_2 "https://github.com/e53e04ac/file-entry-native/tree/8f5e4a1782a5773008a0b5adca827dfe0cd623e0";
+  click C_3 "https://github.com/e53e04ac/hold/tree/418996396af94d436211958d5e6cc4acb5aa089d";
   click C_4 "https://www.npmjs.com/package/@types/async/v/3.2.18";
-  click C_5 "https://www.npmjs.com/package/@types/node/v/18.14.2";
-  click C_6 "https://github.com/e53e04ac/file-entry/tree/f47bb48601e4e7066cd1d17d5a5c035688cfc251";
+  click C_5 "https://www.npmjs.com/package/@types/node/v/18.14.4";
+  click C_6 "https://github.com/e53e04ac/file-entry/tree/604b8be6e60c2a0116ba5bc26939a17584bbcd14";
 ~~~~~
 
 ~~~~~ mermaid
